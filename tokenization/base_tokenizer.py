@@ -59,3 +59,5 @@ class BaseTokenizer(object):
         tokens = re.findall(patterns, text, re.UNICODE)
         return [token[0] for token in tokens]
 
+if "__name__" == "__main__":
+    pass

@@ -8,7 +8,7 @@ __copyright__ = "Copyright 2018, DeepAI-Solutions"
 
 
 class LongMatchingTokenizer(BaseTokenizer):
-    def __init__(self, bi_grams_path='bi_grams.txt', tri_grams_path='tri_grams.txt'):
+    def __init__(self, bi_grams_path='/home/tuannm/mine/vnexpress-texts-classification/tokenization/bi_grams.txt', tri_grams_path='/home/tuannm/mine/vnexpress-texts-classification/tokenization/tri_grams.txt'):
         """
         Initial config
         :param bi_grams_path: path to bi-grams set
@@ -80,7 +80,7 @@ def tokenize_data(input_dir,output_dir):
     for topic_dir in list_topic_dirs:
         save_topic_path = os.path.join(output_dir,topic_dir)
         read_topic_path = os.path.join(input_dir,topic_dir)
-        if not os.path.exists(save_topic_path):
+        if not os.path.exists(save_topic_path+".txt"):
             with open(save_topic_path + ".txt",'w+') as f:
                 for single_file in os.listdir(read_topic_path):
                     single_file_path = os.path.join(read_topic_path,single_file)
@@ -90,5 +90,5 @@ def tokenize_data(input_dir,output_dir):
 
 
 if __name__ == '__main__':
-    tokenize_data("/home/tuannm/internship/core_nlp/data/Train_Full","/home/tuannm/internship/core_nlp/data/tokenized_data")
+    tokenize_data("/home/tuannm/mine/vnexpress-texts-classification/data/Train_Full","/home/tuannm/mine/vnexpress-texts-classification/data/tokenized_data")
 
