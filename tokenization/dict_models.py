@@ -1,5 +1,7 @@
 from base_tokenizer import BaseTokenizer
 from utils import load_n_grams
+import string
+import re
 import ast
 
 import os
@@ -66,6 +68,22 @@ def test():
     tokens = lm_tokenizer.tokenize("Thuế thu nhập cá nhân")
     print(tokens)
 
+def get_stopword(path_file):
+    stopwords = []
+    with open(path_file) as fp:
+        for line in fp:
+            line = re.sub("\n",'',line)
+            stopwords.append("_".join(line.split(" ")))
+    return stopwords
+
+def preprocess(line):
+    input_str = line.translate(str.maketrans("","", string.punctuation))
+    final = re.sub(r'\d+', '', input_str)
+    final = list(map(lambda  e: e.lower(),final.split(" ")))
+    stopwords = get_stopword("/home/tuannm/mine/vnexpress-texts-classification/data/vietnamese-stopwords.txt")
+    final = [el for el in final if el in stopwords]
+    return " ".join(final)
+
 def load_data(input_path):
     lm = LongMatchingTokenizer()
     with open(input_path,'rb') as f:
@@ -80,7 +98,7 @@ def tokenize_data(input_dir,output_dir):
     for topic_dir in list_topic_dirs:
         save_topic_path = os.path.join(output_dir,topic_dir)
         read_topic_path = os.path.join(input_dir,topic_dir)
-        if not os.path.exists(save_topic_path+".txt"):
+        if not os.path.exists(save_topic_path):
             with open(save_topic_path + ".txt",'w+') as f:
                 for single_file in os.listdir(read_topic_path):
                     single_file_path = os.path.join(read_topic_path,single_file)
@@ -88,7 +106,8 @@ def tokenize_data(input_dir,output_dir):
                     f.write("\n")
 
 
-
 if __name__ == '__main__':
-    tokenize_data("/home/tuannm/mine/vnexpress-texts-classification/data/Train_Full","/home/tuannm/mine/vnexpress-texts-classification/data/tokenized_data")
+    #print(test())
+    tokenize_data("/home/tuannm/mine/vnexpress-texts-classification/data/Train_Full","/home/tuannm/mine/vnexpress-texts-classification/data/LM_Seg_Train")
+    tokenize_data("/home/tuannm/mine/vnexpress-texts-classification/data/Test_Full","/home/tuannm/mine/vnexpress-texts-classification/data/LM_Seg_Test")
 
