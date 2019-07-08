@@ -1,5 +1,7 @@
 from base_tokenizer import BaseTokenizer
 from utils import load_n_grams
+import string
+import re
 import ast
 
 import os
@@ -8,7 +10,7 @@ __copyright__ = "Copyright 2018, DeepAI-Solutions"
 
 
 class LongMatchingTokenizer(BaseTokenizer):
-    def __init__(self, bi_grams_path='bi_grams.txt', tri_grams_path='tri_grams.txt'):
+    def __init__(self, bi_grams_path='/home/tuannm/mine/vnexpress-texts-classification/tokenization/bi_grams.txt', tri_grams_path='/home/tuannm/mine/vnexpress-texts-classification/tokenization/tri_grams.txt'):
         """
         Initial config
         :param bi_grams_path: path to bi-grams set
@@ -66,6 +68,22 @@ def test():
     tokens = lm_tokenizer.tokenize("Thuế thu nhập cá nhân")
     print(tokens)
 
+def get_stopword(path_file):
+    stopwords = []
+    with open(path_file) as fp:
+        for line in fp:
+            line = re.sub("\n",'',line)
+            stopwords.append("_".join(line.split(" ")))
+    return stopwords
+
+def preprocess(line):
+    input_str = line.translate(str.maketrans("","", string.punctuation))
+    final = re.sub(r'\d+', '', input_str)
+    final = list(map(lambda  e: e.lower(),final.split(" ")))
+    stopwords = get_stopword("/home/tuannm/mine/vnexpress-texts-classification/data/vietnamese-stopwords.txt")
+    final = [el for el in final if el in stopwords]
+    return " ".join(final)
+
 def load_data(input_path):
     lm = LongMatchingTokenizer()
     with open(input_path,'rb') as f:
@@ -88,7 +106,8 @@ def tokenize_data(input_dir,output_dir):
                     f.write("\n")
 
 
-
 if __name__ == '__main__':
-    tokenize_data("/home/tuannm/internship/core_nlp/data/Train_Full","/home/tuannm/internship/core_nlp/data/tokenized_data")
+    #print(test())
+    tokenize_data("/home/tuannm/mine/vnexpress-texts-classification/data/Train_Full","/home/tuannm/mine/vnexpress-texts-classification/data/LM_Seg_Train")
+    tokenize_data("/home/tuannm/mine/vnexpress-texts-classification/data/Test_Full","/home/tuannm/mine/vnexpress-texts-classification/data/LM_Seg_Test")
 
