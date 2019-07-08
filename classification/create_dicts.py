@@ -1,7 +1,10 @@
 import os
 import re
+<<<<<<< HEAD
 import collections
 import string
+=======
+>>>>>>> origin
 
 def bow_a_topic(topic_path):
     bag_of_words = {}
@@ -10,11 +13,15 @@ def bow_a_topic(topic_path):
     else :
         with open(topic_path) as fp:
             for line in fp:
+<<<<<<< HEAD
                 line = preprocess(line)
+=======
+>>>>>>> origin
                 get_bow_count(line.strip().split(" "),bag_of_words)
     return bag_of_words
 
 
+<<<<<<< HEAD
 def preprocess(line):
     input_str = line.translate(str.maketrans("","", string.punctuation))
     final = re.sub(r'\d+', '', input_str)
@@ -23,12 +30,20 @@ def preprocess(line):
 def get_bow_count(words,bag_of_words):
     for word in words:
         word = word.lower()
+=======
+def get_bow_count(words,bag_of_words):
+    for word in words:
+>>>>>>> origin
         if word in bag_of_words:
             bag_of_words[word] += 1
         else:
             bag_of_words[word] = 1
 
+<<<<<<< HEAD
 def get_entire_bow(topic_dir):
+=======
+def get_idf_bow(topic_dir):
+>>>>>>> origin
     common_bow = {}
     if not os.path.exists(topic_dir):
         print("topic directory does not exist !")
@@ -36,6 +51,7 @@ def get_entire_bow(topic_dir):
         list_topic_path = os.listdir(topic_dir)
         for topic_path in list_topic_path:
             topic_path = os.path.join(topic_dir,topic_path)
+<<<<<<< HEAD
             single_bow = final_bow(topic_path)
             get_common_bow_count(common_bow,single_bow)
     return elminate(common_bow)
@@ -54,6 +70,11 @@ def get_idf_common_bow(common_bow,topic_dir):
                         else:
                             idf[el] = 1
     return idf
+=======
+            single_bow = bow_a_topic(topic_path)
+            get_common_bow_count(common_bow,single_bow)
+    return common_bow
+>>>>>>> origin
 
 def get_common_bow_count(common_bow,single_bow):
     for word in single_bow:
@@ -88,6 +109,7 @@ def get_class_name(topic_name):
     return re.sub(".txt","",topic_name).strip()
 
 
+<<<<<<< HEAD
 def most_common(word_dict,m):
     ordered =  collections.OrderedDict(sorted(word_dict.items(),key=lambda el:-el[1]))
     return [key for key,value in ordered.items()][:m]
@@ -147,3 +169,7 @@ def test_idf(text,path):
 if __name__ == "__main__":
     final = final_bow("/home/tuannm/mine/vnexpress-texts-classification/data/tokenized_data/Chinh tri Xa hoi.txt")
     print(most_common(final,30))
+=======
+if __name__ == "__main__":
+    print(get_freq_doc("/home/tuannm/mine/vnexpress-texts-classification/data/tokenized_data"))
+>>>>>>> origin
